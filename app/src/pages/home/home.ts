@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {NavController} from 'ionic-angular';
 import {BlockchainProvider, CompanyEntry} from '../../providers/blockchain/blockchain';
-import {AccountDetailsPage} from "../account-details/account-details";
 import {QRScanner, QRScannerStatus} from "@ionic-native/qr-scanner";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {Map} from "immutable";
@@ -13,7 +12,6 @@ import {Map} from "immutable";
 export class HomePage {
     public addr$ = new BehaviorSubject<string>("");
     public bons$: BehaviorSubject<Map<string, CompanyEntry>>;
-    public tokenAddress: string;
 
     constructor(private navCtrl: NavController, private qrScanner: QRScanner, private blockchainProvider: BlockchainProvider) {
         this.addr$ = this.blockchainProvider.addr;
