@@ -26,7 +26,7 @@ export class BlockchainProvider {
 
     private web3: Web3;
     private account: Account;
-    private baseBonusCoinContract: Contract;
+    private baseBonusCoinContract: any;
 
     constructor() {
         console.log('Initiate Blockchain Provider');
@@ -223,15 +223,15 @@ export class BlockchainProvider {
                 "name": "TransactionFailed",
                 "type": "event"
             }
-        ], "" , { gasPrice: 20000000000});
+        ], "", {gasPrice: 20000000000});
         console.log(this.web3);
         this.initAsync();
     }
 
     async initAsync() {
-        const contr: Contract = this.baseBonusCoinContract.clone();
+        const contr: any = this.baseBonusCoinContract.clone();
         contr.options.address = "0x841715D615fb5C053ed6104a59bB199def9B2852";
-        const map = this.bons.getValue().set("dummyaddr", {
+        const map = this.bons.getValue().set("0x841715D615fb5C053ed6104a59bB199def9B2852", {
             addr: "0x841715D615fb5C053ed6104a59bB199def9B2852",
             logo: "assets/imgs/kl_logo.png",
             value: 7,
@@ -257,17 +257,28 @@ export class BlockchainProvider {
 
 
         contr.events.BalanceChanged({filter: {wallet: this.account.address}}, (error, event) => {
+            if (error) {
+                console.error(error);
+                return;
+            }
             console.log(event);
-            console.error(error);
+            this.balanceChangedEvent.emit("Action! : " + (event.returnValues.newBalance - event.returnValues.oldBalance).toFixed(2));
+            const company = this.bons.getValue().get(event.address);
+            company.value = event.returnValues.newBalance;
+            this.bons.next(this.bons.getValue().set(event.address, company));
+
+
         });
 
         console.log(await contr.methods.getBalance().call({from: this.account.address}));
-        // console.log(await contr.methods.withdraw('1234').send({from: this.account.address}));
 
     }
 
     async withDraw(scanInput: ScanInput): Promise<void> {
-        this.baseBonusCoinContract.clone()
+        console.log(scanInput);
+        const contr: any = this.baseBonusCoinContract.clone();
+        contr.options.address = scanInput.addr;
+        await contr.methods.withdraw(scanInput.secret).send({from: this.account.address});
     }
 
     getSignedPublicKeyData(): { message: string } {
