@@ -16,4 +16,8 @@ contract BonusCoinGenerator {
     }
   }
 
+  function getContractAdress(string coinName) constant public returns (address){
+    return deployedCoins[coinName];
+  }
+
 }
