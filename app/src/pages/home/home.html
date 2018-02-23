@@ -15,7 +15,7 @@
             <!--<img src="https://upload.wikimedia.org/wikipedia/commons/1/1e/QR-Code_Willkommen_bei_Wikipedia.png">-->
             <ion-list-header>Wallet Details</ion-list-header>
             <button ion-item (click)="openAccountDetails()">
-                <h2>{{ tokenAddress }}</h2>
+                {{ addr$ | async }}
             </button>
         </ion-list>
     </ion-card>

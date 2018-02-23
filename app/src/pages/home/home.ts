@@ -3,7 +3,6 @@ import {NavController} from 'ionic-angular';
 import {BlockchainProvider, CompanyEntry} from '../../providers/blockchain/blockchain';
 import {AccountDetailsPage} from "../account-details/account-details";
 import {QRScanner, QRScannerStatus} from "@ionic-native/qr-scanner";
-import {Observable} from "rxjs/Observable";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {Map} from "immutable";
 
@@ -12,22 +11,18 @@ import {Map} from "immutable";
     templateUrl: 'home.html'
 })
 export class HomePage {
-    public bons$:BehaviorSubject<Map<string, CompanyEntry>>;
-    public tokenAddress:string;
+    public addr$ = new BehaviorSubject<string>("");
+    public bons$: BehaviorSubject<Map<string, CompanyEntry>>;
+    public tokenAddress: string;
 
     constructor(private navCtrl: NavController, private qrScanner: QRScanner, private blockchainProvider: BlockchainProvider) {
-        //TODO
-        this.tokenAddress = "0x6d319656C1DAC95D151005Df17e1b76B20493Ba0";
+        this.addr$ = this.blockchainProvider.addr;
         this.bons$ = this.blockchainProvider.bons;
     }
 
-  public openAccountDetails(): void {
-        this.navCtrl.push("AccountDetailsPage") ;
-  // is a behavior subject
-      console.log(blockchainProvider.addr.getValue());
-      // make qr with JSON.stringify(qr)
-      const qr = blockchainProvider.getSignedPublicKeyData();
-      console.log(JSON.parse(qr.message));}
+    public openAccountDetails(): void {
+        this.navCtrl.push("AccountDetailsPage");
+    }
 
     public scanQrCode(): void {
         this.qrScanner.prepare()
