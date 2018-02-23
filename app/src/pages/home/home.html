@@ -1,18 +1,36 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>Home</ion-title>
-  </ion-navbar>
+    <ion-navbar color="primary">
+        <ion-title>Ultimate Coupon App</ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only clear (click)="scanQrCode()">
+                <ion-icon name="qr-scanner"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <h2>Welcome to Ionic!</h2>
-  <p>
-    This starter project comes with simple tabs-based layout for apps
-    that are going to primarily use a Tabbed UI.
-  </p>
-  <p>
-    Take a look at the <code>src/pages/</code> directory to add or change tabs,
-    update any existing page or create new pages.
+    <ion-card>
+        <ion-list>
+            <!--<img src="https://upload.wikimedia.org/wikipedia/commons/1/1e/QR-Code_Willkommen_bei_Wikipedia.png">-->
+            <ion-list-header>Wallet Details</ion-list-header>
+            <button ion-item (click)="openAccountDetails()">
+                {{ addr$ | async }}
+            </button>
+        </ion-list>
+    </ion-card>
 
-  </p>
+    <ion-card>
+        <ion-list>
+            <ion-list-header>Coins</ion-list-header>
+            <ion-item *ngFor="let bon of (bons$ | async).toList()">
+                <ion-avatar item-start>
+                    <img src="{{ bon.logo }}">
+                </ion-avatar>
+                <h2>{{ bon.name }}</h2>
+                <p>{{ bon.addr }}</p>
+                <ion-note item-end>{{ bon.value }}</ion-note>
+            </ion-item>
+        </ion-list>
+    </ion-card>
 </ion-content>

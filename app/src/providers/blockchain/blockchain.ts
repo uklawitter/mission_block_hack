@@ -32,14 +32,204 @@ export class BlockchainProvider {
         this.web3 = new Web3(new Web3.providers.HttpProvider(KOVAN_TEST_NET));
         this.account = this.web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY);
         this.addr.next(this.account.address);
-        this.baseBonusCoinContract = new this.web3.eth.Contract(null);
+        this.baseBonusCoinContract = new this.web3.eth.Contract([
+            {
+                "constant": true,
+                "inputs": [],
+                "name": "getBalance",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "secret",
+                        "type": "string"
+                    }
+                ],
+                "name": "withdraw",
+                "outputs": [],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "secret",
+                        "type": "string"
+                    }
+                ],
+                "name": "testHashes",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "bytes32"
+                    },
+                    {
+                        "name": "",
+                        "type": "bytes32"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "pure",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [],
+                "name": "owner",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "amount",
+                        "type": "uint256"
+                    },
+                    {
+                        "name": "wallet",
+                        "type": "address"
+                    }
+                ],
+                "name": "remove",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [],
+                "name": "coinName",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "string"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "amount",
+                        "type": "uint256"
+                    },
+                    {
+                        "name": "hashedSecret",
+                        "type": "bytes32"
+                    }
+                ],
+                "name": "allowWithdrawal",
+                "outputs": [],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "name": "newName",
+                        "type": "string"
+                    },
+                    {
+                        "name": "newOwner",
+                        "type": "address"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "constructor"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": true,
+                        "name": "wallet",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": false,
+                        "name": "coinName",
+                        "type": "string"
+                    },
+                    {
+                        "indexed": false,
+                        "name": "oldBalance",
+                        "type": "uint256"
+                    },
+                    {
+                        "indexed": false,
+                        "name": "newBalance",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "BalanceChanged",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": true,
+                        "name": "wallet",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": false,
+                        "name": "coinName",
+                        "type": "string"
+                    },
+                    {
+                        "indexed": false,
+                        "name": "attemptedPurchase",
+                        "type": "uint256"
+                    },
+                    {
+                        "indexed": false,
+                        "name": "currentBalance",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "TransactionFailed",
+                "type": "event"
+            }
+        ]);
         console.log(this.web3);
         this.initAsync();
     }
 
     async initAsync() {
-        const map = this.bons.getValue().set("dummyaddr", {addr: "dummyaddr", logo: "", value: 7, name: "Koin", contract: null});
-        this.bons.next(map.set("dummyaddr2", {addr: "dummyaddr2", logo: "", value: 15, name: "Lidl Coin", contract: null}));
+        const map = this.bons.getValue().set("dummyaddr", {addr: "dummyaddr", logo: "assets/imgs/kl_logo.png", value: 7, name: "Koin", contract: null});
+        this.bons.next(map.set("dummyaddr2", {addr: "dummyaddr2", logo: "assets/imgs/logo_2.jpeg", value: 15, name: "Lidl Coin", contract: null}));
         console.log(this.bons.getValue());
         const alive = await this.web3.eth.net.isListening();
         if (!alive) {
@@ -51,7 +241,7 @@ export class BlockchainProvider {
         console.log('balance: ' + await this.web3.eth.getBalance(this.account.address));
     }
 
-    async withDraw(secret: string): Promise<void> {
+    async withDraw(scanInput: ScanInput): Promise<void> {
     }
 
     getSignedPublicKeyData() : {message: string} {
@@ -74,4 +264,9 @@ export interface CompanyEntry {
     value: number
     name: string
     contract: Contract
+}
+
+export interface ScanInput {
+    addr: string
+    secret: string
 }
