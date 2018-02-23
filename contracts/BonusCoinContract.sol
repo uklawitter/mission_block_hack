@@ -35,9 +35,11 @@ contract BonusCoinContract {
     function withdraw(string secret) public {
         bytes32 hash = keccak256(secret);
         uint256 additionalBalance = allowance[hash];
-        if (additionalBalance == 0)
-            return;
-
+        if (additionalBalance == 0) {
+	  WithdrawalFailed(msg.sender, coinName, secret);
+	  return;
+	}
+	
         allowance[hash] = 0;
         uint256 senderOldBalance = balance[msg.sender];
         uint256 newBalance = balance[msg.sender] += additionalBalance;
@@ -62,6 +64,7 @@ contract BonusCoinContract {
 
     event BalanceChanged(address indexed wallet, string coinName, uint256 oldBalance, uint256 newBalance);
     event TransactionFailed(address indexed wallet, string coinName, uint256 attemptedPurchase, uint256 currentBalance);
+    event WithdrawalFailed(address indexed wallet, string coinName, string usedSecret);
 
     function testHashes(string secret) public pure returns(bytes32, bytes32) {
         return(sha3(secret), keccak256(secret));
