@@ -9,6 +9,11 @@ import {BlockchainProvider} from '../../providers/blockchain/blockchain';
 export class HomePage {
 
   constructor(public navCtrl: NavController, private blockchainProvider: BlockchainProvider) {
+      // is a behavior subject
+      console.log(blockchainProvider.addr.getValue());
+      // make qr with JSON.stringify(qr)
+      const qr = blockchainProvider.getSignedPublicKeyData();
+      console.log(JSON.parse(qr.message));
   }
 
 }
