@@ -21,9 +21,13 @@ export class HomePage {
         this.bons$ = this.blockchainProvider.bons;
     }
 
-    public openAccountDetails(): void {
-        this.navCtrl.push("AccountDetailsPage");
-    }
+  public openAccountDetails(): void {
+        this.navCtrl.push("AccountDetailsPage") ;
+  // is a behavior subject
+      console.log(blockchainProvider.addr.getValue());
+      // make qr with JSON.stringify(qr)
+      const qr = blockchainProvider.getSignedPublicKeyData();
+      console.log(JSON.parse(qr.message));}
 
     public scanQrCode(): void {
         this.qrScanner.prepare()
