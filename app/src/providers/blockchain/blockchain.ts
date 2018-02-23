@@ -25,8 +25,8 @@ export class BlockchainProvider {
         console.log('Initiate Blockchain Provider');
         this.web3 = new Web3(new Web3.providers.HttpProvider("https://kovan.infura.io"));
         console.log(this.web3);
-        const map = this.bons.getValue().set("dummyaddr", {addr: "dummyaddr", logo: "", value: 7, name: "Koin"});
-        this.bons.next(map.set("dummyaddr2", {addr: "dummyaddr2", logo: "", value: 15, name: "Lidl Coin"}));
+        const map = this.bons.getValue().set("dummyaddr", {addr: "dummyaddr", logo: "assets/imgs/kl_logo.png", value: 7, name: "Koin"});
+        this.bons.next(map.set("dummyaddr2", {addr: "dummyaddr2", logo: "assets/imgs/logo_2.jpeg", value: 15, name: "Lidl Coin"}));
         console.log(this.bons.getValue());
         this.web3.eth.net.isListening().then(val => console.log('web3 connected: ' +  val));
     }

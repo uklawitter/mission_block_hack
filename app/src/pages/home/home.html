@@ -10,12 +10,12 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-card>
+    <ion-card>
         <ion-list>
             <!--<img src="https://upload.wikimedia.org/wikipedia/commons/1/1e/QR-Code_Willkommen_bei_Wikipedia.png">-->
             <ion-list-header>Wallet Details</ion-list-header>
             <button ion-item (click)="openAccountDetails()">
-                <h2>iubervpoaiwnrvaeöornvwaeori</h2>
+                <h2>{{ tokenAddress }}</h2>
             </button>
         </ion-list>
     </ion-card>
@@ -23,29 +23,13 @@
     <ion-card>
         <ion-list>
             <ion-list-header>Coins</ion-list-header>
-            <ion-item>
+            <ion-item *ngFor="let bon of (bons$ | async).toList()">
                 <ion-avatar item-start>
-                    <img src="assets/imgs/kl_logo.png">
+                    <img src="{{ bon.logo }}">
                 </ion-avatar>
-                <h2>Kaufland</h2>
-  <p>iuhrgoweirhgoewrghworighjoi</p>
-    <ion-note item-end>88</ion-note>
-    </ion-item>
-            <ion-item>
-                <ion-avatar item-start>
-                    <img src="assets/imgs/kl_logo.png">
-                </ion-avatar>
-                <h2>Kaufland</h2>
-  <p>iuhrgoweirhgoewrghworighjoi</p>
-  <ion-note item-end>88</ion-note>
-            </ion-item>
-            <ion-item>
-                <ion-avatar item-start>
-    <imgsrc="assets/imgs/kl_logo.png">
-    </ion-avatar>
-                <h2>Kaufland</h2>
-  <p>iuhrgoweirhgoewrghworighjoi</p>
-                <ion-note item-end>88</ion-note>
+                <h2>{{ bon.name }}</h2>
+                <p>{{ bon.addr }}</p>
+                <ion-note item-end>{{ bon.value }}</ion-note>
             </ion-item>
         </ion-list>
     </ion-card>
