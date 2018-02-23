@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController} from 'ionic-angular';
+import {NavController, ToastController} from 'ionic-angular';
 import {BlockchainProvider, CompanyEntry} from '../../providers/blockchain/blockchain';
 import {QRScanner, QRScannerStatus} from "@ionic-native/qr-scanner";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
@@ -12,14 +12,35 @@ import {Map} from "immutable";
 export class HomePage {
     public addr$ = new BehaviorSubject<string>("");
     public bons$: BehaviorSubject<Map<string, CompanyEntry>>;
+    public testInput: string;
 
-    constructor(private navCtrl: NavController, private qrScanner: QRScanner, private blockchainProvider: BlockchainProvider) {
+    constructor(private navCtrl: NavController, private qrScanner: QRScanner, private blockchainProvider: BlockchainProvider, public toastCtrl: ToastController) {
         this.addr$ = this.blockchainProvider.addr;
         this.bons$ = this.blockchainProvider.bons;
+
+        this.blockchainProvider.balanceChangedEvent.subscribe((event: string) => {
+            this.toastCtrl.create({
+                message: event,
+                duration: 5000,
+                cssClass: "secondary"
+            }).present();
+        });
+
+        this.blockchainProvider.transactionFailedEvent.subscribe((event: string) => {
+            this.toastCtrl.create({
+                message: event,
+                duration: 5000,
+                cssClass: "danger"
+            }).present();
+        })
     }
 
     public openAccountDetails(): void {
         this.navCtrl.push("AccountDetailsPage");
+    }
+
+    public test() {
+        this.blockchainProvider.withDraw({addr: "", secret: this.testInput});
     }
 
     public scanQrCode(): void {

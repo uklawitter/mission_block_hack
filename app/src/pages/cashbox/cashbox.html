@@ -1,0 +1,26 @@
+<!--
+  Generated template for the CashboxPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+    <ion-navbar>
+        <ion-title>Kassenterminal</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-list no-lines>
+        <ion-item>
+            <ion-label floating>Betrag</ion-label>
+            <ion-input type="text" [(ngModel)]="amount"></ion-input>
+        </ion-item>
+        <ion-item>
+            <button ion-button block large color="secondary" (click)="generateQrCode()">Code generieren</button>
+        </ion-item>
+        <ion-item *ngIf="qrCodeData" text-center>
+            <qr-code [value]="qrCodeData" [size]="200"></qr-code>
+        </ion-item>
+    </ion-list>
+</ion-content>

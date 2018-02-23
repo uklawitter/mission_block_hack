@@ -5,26 +5,27 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
     <ion-navbar>
-        <ion-title>AccountDetails</ion-title>
+        <ion-title>Coupons einlösen</ion-title>
     </ion-navbar>
-
 </ion-header>
 
 
 <ion-content padding>
-    <ion-card>
-        <qr-code [value]="qrData" [size]="200"></qr-code>
-        <ion-item-divider>Gültig von</ion-item-divider>
-        <ion-item>
-            {{ message.creation | date:'EEEE dd.LL HH:mm' }}
+    <ion-list>
+        <ion-item text-center>
+            <qr-code [value]="qrData" [size]="200"></qr-code>
         </ion-item>
-        <ion-item-divider>Gültig bis</ion-item-divider>
         <ion-item>
-            {{ message.expires | date:'EEEE dd.LL HH:mm' }}
+            Gültig von
+            <ion-note item-end>{{ message.creation | date:'EEEE dd.LL HH:mm' }}</ion-note>
         </ion-item>
-        <p text-center>
-        </p>
-    </ion-card>
+        <ion-item>
+            Gültig bis
+            <ion-note item-end>{{ message.expires | date:'EEEE dd.LL HH:mm' }}</ion-note>
+        </ion-item>
+        <ion-item text-wrap>
+            ID <ion-note>{{ addr$ | async }}</ion-note>
+        </ion-item>
+    </ion-list>
 </ion-content>

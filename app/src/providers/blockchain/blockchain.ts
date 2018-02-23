@@ -223,7 +223,7 @@ export class BlockchainProvider {
                 "name": "TransactionFailed",
                 "type": "event"
             }
-        ], "" , { gasPrice: '20000000000'});
+        ], "" , { gasPrice: 20000000000});
         console.log(this.web3);
         this.initAsync();
     }

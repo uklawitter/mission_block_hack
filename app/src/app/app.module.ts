@@ -14,12 +14,14 @@ import {BlockchainProvider} from '../providers/blockchain/blockchain';
 import {StorageProvider} from '../providers/storage/storage';
 import {QRScanner} from "@ionic-native/qr-scanner";
 import {QRCodeModule} from "angular2-qrcode";
+import {CashboxPage} from "../pages/cashbox/cashbox";
 
 @NgModule({
     declarations: [
         MyApp,
         AboutPage,
         ContactPage,
+        CashboxPage,
         HomePage,
         TabsPage
     ],
@@ -33,6 +35,7 @@ import {QRCodeModule} from "angular2-qrcode";
         MyApp,
         AboutPage,
         ContactPage,
+        CashboxPage,
         HomePage,
         TabsPage
     ],

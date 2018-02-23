@@ -1,11 +1,6 @@
 <ion-header>
-    <ion-navbar color="primary">
+    <ion-navbar>
         <ion-title>Ultimate Coupon App</ion-title>
-        <ion-buttons end>
-            <button ion-button icon-only clear (click)="scanQrCode()">
-                <ion-icon name="qr-scanner"></ion-icon>
-            </button>
-        </ion-buttons>
     </ion-navbar>
 </ion-header>
 
@@ -13,10 +8,19 @@
     <ion-card>
         <ion-list>
             <!--<img src="https://upload.wikimedia.org/wikipedia/commons/1/1e/QR-Code_Willkommen_bei_Wikipedia.png">-->
-            <ion-list-header>Wallet Details</ion-list-header>
-            <button ion-item (click)="openAccountDetails()">
-                {{ addr$ | async }}
+            <ion-list-header>Wallet</ion-list-header>
+            <button ion-item (click)="scanQrCode()">
+                <ion-icon name="qr-scanner" item-start></ion-icon>
+                Kassenzettel scannen
             </button>
+            <button ion-item (click)="openAccountDetails()">
+                <ion-icon name="cash" item-start></ion-icon>
+                Coupons einlösen
+            </button>
+            <ion-item>
+                <ion-input type="text" [(ngModel)]="testInput"></ion-input>
+            </ion-item>
+            <button ion-item (click)="test()"></button>
         </ion-list>
     </ion-card>
 
