@@ -2,10 +2,12 @@ import {EventEmitter, Injectable} from '@angular/core';
 import {Map} from 'immutable';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import Web3 from 'web3';
-import {Account} from 'web3/types';
+import {Account, Contract} from 'web3/types';
 
 // TODO: for debugging only
 const PRIVATE_KEY = "0xa0f2f1f1ecaca75f71f33b356e31821edaac19ec486fe3c097378e65bb22f63a";
+
+const KOVAN_TEST_NET = "https://kovan.infura.io";
 
 /*
   Generated class for the BlockchainProvider provider.
@@ -23,28 +25,33 @@ export class BlockchainProvider {
 
     private web3: Web3;
     private account: Account;
+    private baseBonusCoinContract: Contract;
 
     constructor() {
         console.log('Initiate Blockchain Provider');
-        this.web3 = new Web3(new Web3.providers.HttpProvider("https://kovan.infura.io"));
+        this.web3 = new Web3(new Web3.providers.HttpProvider(KOVAN_TEST_NET));
         this.account = this.web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY);
         this.addr.next(this.account.address);
+        this.baseBonusCoinContract = new this.web3.eth.Contract(null);
         console.log(this.web3);
         this.initAsync();
     }
 
     async initAsync() {
-        const map = this.bons.getValue().set("dummyaddr", {addr: "dummyaddr", logo: "", value: 7, name: "Koin"});
-        this.bons.next(map.set("dummyaddr2", {addr: "dummyaddr2", logo: "", value: 15, name: "Lidl Coin"}));
+        const map = this.bons.getValue().set("dummyaddr", {addr: "dummyaddr", logo: "", value: 7, name: "Koin", contract: null});
+        this.bons.next(map.set("dummyaddr2", {addr: "dummyaddr2", logo: "", value: 15, name: "Lidl Coin", contract: null}));
         console.log(this.bons.getValue());
         const alive = await this.web3.eth.net.isListening();
+        if (!alive) {
+            console.error("Could not Connect to " + KOVAN_TEST_NET);
+            return
+        }
         console.log('web3 connected: ' + alive);
         console.log(this.account);
         console.log('balance: ' + await this.web3.eth.getBalance(this.account.address));
     }
 
-    async withDraw(walletAdr: string, secret: string): Promise<number> {
-        return null;
+    async withDraw(secret: string): Promise<void> {
     }
 
     getSignedPublicKeyData() : {message: string} {
@@ -66,4 +73,5 @@ export interface CompanyEntry {
     logo: string
     value: number
     name: string
+    contract: Contract
 }
