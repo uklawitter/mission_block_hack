@@ -22,6 +22,12 @@ contract BonusCoinContract {
         currentTotal = 0;
     }
 
+    function getBalance() public view
+        returns(uint256) {
+
+        return balance[msg.sender];
+    }
+
     function allowWithdrawal(uint256 amount, bytes32 hashedSecret) public onlyOwner(msg.sender) {
         allowance[hashedSecret] += amount;
     }
