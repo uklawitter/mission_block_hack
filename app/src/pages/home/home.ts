@@ -1,3 +1,6 @@
+import { Component } from '@angular/core';
+import { NavController } from 'ionic-angular';
+import {BlockchainProvider} from '../../providers/blockchain/blockchain';
 import {Component} from '@angular/core';
 import {NavController} from 'ionic-angular';
 import {AccountDetailsPage} from "../account-details/account-details";
@@ -9,7 +12,7 @@ import {QRScanner, QRScannerStatus} from "@ionic-native/qr-scanner";
 })
 export class HomePage {
 
-    constructor(private navCtrl: NavController, private qrScanner: QRScanner) {
+    constructor(private navCtrl: NavController, private qrScanner: QRScanner, private blockchainProvider: BlockchainProvider) {
     }
 
     public openAccountDetails(): void {
