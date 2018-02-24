@@ -285,6 +285,13 @@ export class BlockchainProvider {
         console.log(this.account);
         console.log('balance: ' + await contr.methods.getBalance().call({from: this.account.address}));
 
+        console.log(this.web3.eth.accounts.sign(
+            JSON.stringify({
+                creation: new Date(),
+                expires: new Date(),
+                addr: this.account.address
+            }), this.account.privateKey) as { message: string });
+
 
         contr.events.BalanceChanged({filter: {wallet: this.account.address}}, (error, event) => {
             if (error) {
@@ -338,6 +345,13 @@ export class BlockchainProvider {
         return contr.methods.allowWithdrawal(value, this.web3.utils.keccak256(secret)).send({from: this.companyAccount.address});
     }
 
+    async remove(value: number, qrstring: string) {
+        const qr = JSON.parse(qrstring);
+        const message = JSON.parse(qr.message);
+        const contr = this.baseBonusCoinContract.clone();
+        contr.options.address = this.CONTR;
+        await contr.methods.remove(value, message.addr).send({from: this.companyAccount.address});
+    }
 }
 
 export interface CompanyEntry {
