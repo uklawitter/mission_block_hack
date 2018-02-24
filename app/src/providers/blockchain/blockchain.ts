@@ -365,7 +365,7 @@ export class BlockchainProvider {
         const message = JSON.parse(qr.message);
         const contr = this.baseBonusCoinContract.clone();
         contr.options.address = this.CONTR;
-        await contr.methods.remove(value, message.addr).send({from: this.companyAccount.address});
+        return await contr.methods.remove(value, message.addr).send({from: this.companyAccount.address});
     }
 }
 
