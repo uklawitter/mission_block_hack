@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {BlockchainProvider} from "../../providers/blockchain/blockchain";
+import {QRScanner, QRScannerStatus} from "@ionic-native/qr-scanner";
 
 /**
  * Generated class for the CashboxPage page.
@@ -16,9 +17,37 @@ import {BlockchainProvider} from "../../providers/blockchain/blockchain";
 })
 export class CashboxPage {
     public qrCodeData: string;
-    public amount: string;
+    public amount: number = 40;
+    public refund: number = 0;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, private blockchainProvider: BlockchainProvider) {
+    constructor(public navCtrl: NavController, public navParams: NavParams, private blockchainProvider: BlockchainProvider, private qrScanner: QRScanner) {
+    }
+
+    useCoupon() {
+        this.qrScanner.prepare()
+            .then((status: QRScannerStatus) => {
+                if (status.authorized) {
+                    let scanSub = this.qrScanner.scan().subscribe((text: string) => {
+                        console.log("MARKER: text", text);
+                        this.qrScanner.hide();
+                        scanSub.unsubscribe();
+
+                        window.document.querySelector('ion-app').classList.remove('transparent-body')
+                    });
+
+                    this.qrScanner.show();
+                    window.document.querySelector('ion-app').classList.add('transparent-body');
+                } else if (status.denied) {
+                    //TODO
+                } else {
+                    //TODO
+                }
+            })
+            .catch((e: any) => console.log('Error is', e));
+    }
+
+    removeCoupon() {
+        this.refund = 0;
     }
 
     async generateQrCode() {

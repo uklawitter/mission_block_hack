@@ -1,3 +1,12 @@
 page-cashbox {
+  .bill {
+    background-color: #fffdd8;
+    font-size: small;
+    font-family: monospace;
 
+    .category {
+      font-weight: bold;
+      text-decoration: underline;
+    }
+  }
 }
