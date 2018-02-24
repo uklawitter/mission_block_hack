@@ -269,7 +269,7 @@ export class BlockchainProvider {
             contract: null
         });
         this.bons.next(map.set("dummyaddr2", {
-            addr: "dummyaddr2",
+            addr: "0x004fb0844f5dcE356E9D8Ffa3172052b28F91141",
             logo: "assets/imgs/logo_2.jpeg",
             value: 15,
             name: "Lidl Coin",
@@ -281,9 +281,9 @@ export class BlockchainProvider {
             console.error("Could not Connect to " + KOVAN_TEST_NET);
             return
         }
-        console.log('web3 connected: ' + alive);
+        console.log('🔋 web3 connected: ' + alive);
         console.log(this.account);
-        console.log('balance: ' + await contr.methods.getBalance().call({from: this.account.address}));
+        console.log('💶 balance: ' + await contr.methods.getBalance().call({from: this.account.address}));
 
         console.log(this.web3.eth.accounts.sign(
             JSON.stringify({
@@ -304,7 +304,6 @@ export class BlockchainProvider {
             const company = this.bons.getValue().get(event.address);
             company.value = event.returnValues.newBalance;
             this.bons.next(this.bons.getValue().set(event.address, company));
-
 
         });
 

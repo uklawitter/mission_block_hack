@@ -55,7 +55,8 @@ export class CashboxPage {
             content: "Kassenzettel wird gedruckt...",
         });
         loader.present();
-        const secret = new Date().toDateString();
+        const secret = +new Date() + "";
+        console.log("🔐 Generated Secret: " + secret);
         await this.blockchainProvider.allowWithdrawal(+this.amount, secret);
         this.qrCodeData = JSON.stringify({ secret : secret, addr: "0x02Bf9b7d3dD7a008CA608102a01c877E1509883F"});
         loader.dismiss();
