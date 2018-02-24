@@ -26,7 +26,7 @@ export class HomePage {
             this.toastCtrl.create({
                 message: event,
                 duration: 5000,
-                cssClass: "secondary"
+                cssClass: "toast-success"
             }).present();
         });
 
@@ -34,7 +34,7 @@ export class HomePage {
             this.toastCtrl.create({
                 message: event,
                 duration: 5000,
-                cssClass: "danger"
+                cssClass: "toast-fail"
             }).present();
         })
     }

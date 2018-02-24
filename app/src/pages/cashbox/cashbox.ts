@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {IonicPage, LoadingController, NavController, NavParams} from 'ionic-angular';
+import {IonicPage, LoadingController, NavController, NavParams, ToastController} from 'ionic-angular';
 import {BlockchainProvider} from "../../providers/blockchain/blockchain";
 import {QRScanner, QRScannerStatus} from "@ionic-native/qr-scanner";
 
@@ -20,7 +20,7 @@ export class CashboxPage {
     public amount: number = 500;
     public refund: number = 0;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, private blockchainProvider: BlockchainProvider, private qrScanner: QRScanner, private loadingCtrl: LoadingController) {
+    constructor(public navCtrl: NavController, public navParams: NavParams, private blockchainProvider: BlockchainProvider, private qrScanner: QRScanner, private loadingCtrl: LoadingController, private toastCtrl: ToastController) {
     }
 
     useCoupon() {
@@ -38,15 +38,21 @@ export class CashboxPage {
                         loader.present();
                         const tx = await this.blockchainProvider.remove(45, text);
                         console.log(tx);
+
+                        loader.dismiss();
+
                         if( tx.events.TransactionFailed) {
                             console.error('🚨 not enough coins')
-                            // TODO: Fehlermeldung
+                            this.toastCtrl.create({
+                                message: "Guthaben unzureichend!",
+                                duration: 5000,
+                                cssClass: "toast-fail"
+                            }).present();
+
                         }else {
                             console.log('👌🏼 bonus granted');
                             this.refund = 45;
-                            loader.dismiss();
                         }
-
                     });
 
                     this.qrScanner.show();

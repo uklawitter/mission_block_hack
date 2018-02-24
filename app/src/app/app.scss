@@ -1,6 +1,5 @@
 // http://ionicframework.com/docs/theming/
 
-
 // App Global Sass
 // --------------------------------------------------
 // Put style rules here that you want to apply globally. These
@@ -22,6 +21,14 @@
 
 .content {
   background-color: color($colors, light);
+}
+
+.toast-success .toast-container {
+  background-color: darkgreen;
+}
+
+.toast-fail .toast-container {
+  background-color: darkred;
 }
 
 qr-code img {
