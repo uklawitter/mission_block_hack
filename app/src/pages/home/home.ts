@@ -12,7 +12,6 @@ import {Map} from "immutable";
 export class HomePage {
     public addr$ = new BehaviorSubject<string>("");
     public bons$: BehaviorSubject<Map<string, CompanyEntry>>;
-    public testInput: string;
 
     constructor(private navCtrl: NavController, private qrScanner: QRScanner, private blockchainProvider: BlockchainProvider, private toastCtrl: ToastController, public loadingCtrl: LoadingController) {
         this.addr$ = this.blockchainProvider.addr;
@@ -39,24 +38,21 @@ export class HomePage {
         this.navCtrl.push("AccountDetailsPage");
     }
 
-    public async test() {
-        console.log(await this.blockchainProvider.withDraw({addr: this.blockchainProvider.CONTR, secret: this.testInput}));
-    }
-
     public scanQrCode(): void {
         this.qrScanner.prepare()
             .then((status: QRScannerStatus) => {
                 if (status.authorized) {
                     let scanSub = this.qrScanner.scan().subscribe(async (text: string) => {
                         this.qrScanner.hide();
+                        scanSub.unsubscribe();
+                        window.document.querySelector('ion-app').classList.remove('transparent-body');
+
                         let loader = this.loadingCtrl.create({
                             content: "Guthaben wird gutgeschrieben...",
                         });
                         loader.present();
                         await this.blockchainProvider.withDraw(JSON.parse(text));
                         loader.dismiss();
-                        scanSub.unsubscribe();
-                        window.document.querySelector('ion-app').classList.remove('transparent-body')
                     });
 
                     this.qrScanner.show();
