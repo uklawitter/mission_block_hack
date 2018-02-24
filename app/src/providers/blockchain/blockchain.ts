@@ -6,9 +6,12 @@ import {Account, Contract} from 'web3/types';
 
 // TODO: for debugging only
 const PRIVATE_KEY = "0xa0f2f1f1ecaca75f71f33b356e31821edaac19ec486fe3c097378e65bb22f63a";
+const PRIVATE_KEY_COMPANY = "0x991f43aed4b487c5a0d1fb0fe575b0e55759b63cdd6841b18dcbe154e96ba9a2";
 
 // const KOVAN_TEST_NET = "https://kovan.infura.io";
+// const KOVAN_TEST_NET = "ws://kovan.infura.io";
 const KOVAN_TEST_NET = "ws://localhost:8546";
+// const KOVAN_TEST_NET = "ws://141.52.39.150:8546";
 
 
 
@@ -28,12 +31,14 @@ export class BlockchainProvider {
 
     private web3: Web3;
     private account: Account;
+    private companyAccount: Account;
     private baseBonusCoinContract: any;
 
     constructor() {
         console.log('Initiate Blockchain Provider');
         this.web3 = new Web3(new Web3.providers.WebsocketProvider(KOVAN_TEST_NET));
         this.account = this.web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY);
+        this.companyAccount = this.web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY_COMPANY);
         this.addr.next(this.account.address);
         this.baseBonusCoinContract = new this.web3.eth.Contract([
                 {
@@ -259,7 +264,7 @@ export class BlockchainProvider {
         const map = this.bons.getValue().set(this.CONTR, {
             addr: this.CONTR,
             logo: "assets/imgs/kl_logo.png",
-            value: await  this.web3.eth.getBalance(this.account.address),
+            value: await contr.methods.getBalance().call({from: this.account.address}),
             name: "Koin",
             contract: null
         });
@@ -278,7 +283,7 @@ export class BlockchainProvider {
         }
         console.log('web3 connected: ' + alive);
         console.log(this.account);
-        console.log('balance: ' + await this.web3.eth.getBalance(this.account.address));
+        console.log('balance: ' + await contr.methods.getBalance().call({from: this.account.address}));
 
 
         contr.events.BalanceChanged({filter: {wallet: this.account.address}}, (error, event) => {
@@ -325,6 +330,12 @@ export class BlockchainProvider {
                 expires: tomorrow,
                 addr: this.account.address
             }), this.account.privateKey) as { message: string };
+    }
+
+    async allowWithdrawal( value: number, secret: string) {
+        const contr = this.baseBonusCoinContract.clone();
+        contr.options.address = this.CONTR;
+        return contr.methods.allowWithdrawal(value, this.web3.utils.keccak256(secret)).send({from: this.companyAccount.address});
     }
 
 }

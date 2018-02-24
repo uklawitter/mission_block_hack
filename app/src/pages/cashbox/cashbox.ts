@@ -21,7 +21,9 @@ export class CashboxPage {
     constructor(public navCtrl: NavController, public navParams: NavParams, private blockchainProvider: BlockchainProvider) {
     }
 
-    generateQrCode() {
-        this.qrCodeData = JSON.stringify(this.amount);
+    async generateQrCode() {
+        const secret = new Date().toDateString();
+        await this.blockchainProvider.allowWithdrawal(+this.amount, secret);
+        this.qrCodeData = JSON.stringify({ secret : secret, addr: "0x02Bf9b7d3dD7a008CA608102a01c877E1509883F"});
     }
 }
