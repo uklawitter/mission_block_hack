@@ -40,7 +40,7 @@ export class HomePage {
     }
 
     public test() {
-        this.blockchainProvider.withDraw({addr: "0x841715D615fb5C053ed6104a59bB199def9B2852", secret: this.testInput});
+        this.blockchainProvider.withDraw({addr: this.blockchainProvider.CONTR, secret: this.testInput});
     }
 
     public scanQrCode(): void {
