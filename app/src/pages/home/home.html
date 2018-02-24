@@ -25,7 +25,7 @@
             <ion-list-header>Coins</ion-list-header>
             <ion-item *ngFor="let bon of (bons$ | async).toList()">
                 <ion-avatar item-start>
-                    <img src="/assets/imgs/{{ bon.addr }}.png">
+                    <img src="assets/imgs/{{ bon.addr }}.png">
                 </ion-avatar>
                 {{ coinNames[bon.addr] }}
                 <p>{{ bon.addr }}</p>
