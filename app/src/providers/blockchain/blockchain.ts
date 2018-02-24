@@ -9,9 +9,9 @@ const PRIVATE_KEY = "0xa0f2f1f1ecaca75f71f33b356e31821edaac19ec486fe3c097378e65b
 const PRIVATE_KEY_COMPANY = "0x991f43aed4b487c5a0d1fb0fe575b0e55759b63cdd6841b18dcbe154e96ba9a2";
 
 // const KOVAN_TEST_NET = "https://kovan.infura.io";
-// const KOVAN_TEST_NET = "ws://kovan.infura.io";
-const KOVAN_TEST_NET = "ws://localhost:8546";
-// const KOVAN_TEST_NET = "ws://141.52.39.150:8546";
+// const KOVAN_TEST_NET = "wss://kovan.infura.io/ws";
+// const KOVAN_TEST_NET = "ws://localhost:8546";
+const KOVAN_TEST_NET = "ws://141.52.39.150:8546";
 
 
 

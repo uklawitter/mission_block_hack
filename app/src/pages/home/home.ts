@@ -39,8 +39,8 @@ export class HomePage {
         this.navCtrl.push("AccountDetailsPage");
     }
 
-    public test() {
-        this.blockchainProvider.withDraw({addr: this.blockchainProvider.CONTR, secret: this.testInput});
+    public async test() {
+        console.log(await this.blockchainProvider.withDraw({addr: this.blockchainProvider.CONTR, secret: this.testInput}));
     }
 
     public scanQrCode(): void {
