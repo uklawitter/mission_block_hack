@@ -1,6 +1,62 @@
 [
 	{
 		"constant": true,
+		"inputs": [],
+		"name": "getBalance",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "secret",
+				"type": "string"
+			}
+		],
+		"name": "withdraw",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getTotalCirculating",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getTotalAllowed",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
 		"inputs": [
 			{
 				"name": "secret",
@@ -37,17 +93,26 @@
 		"type": "function"
 	},
 	{
-		"constant": true,
-		"inputs": [],
-		"name": "getBalance",
+		"constant": false,
+		"inputs": [
+			{
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"name": "wallet",
+				"type": "address"
+			}
+		],
+		"name": "remove",
 		"outputs": [
 			{
 				"name": "",
-				"type": "uint256"
+				"type": "bool"
 			}
 		],
 		"payable": false,
-		"stateMutability": "view",
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -63,6 +128,62 @@
 		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"name": "hashedSecret",
+				"type": "bytes32"
+			}
+		],
+		"name": "allowWithdrawal",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "requestedAmount",
+				"type": "uint256"
+			},
+			{
+				"name": "wallet",
+				"type": "address"
+			}
+		],
+		"name": "isBalanceSufficient",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"name": "newName",
+				"type": "string"
+			},
+			{
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
 	},
 	{
 		"anonymous": false,
@@ -139,75 +260,5 @@
 		],
 		"name": "WithdrawalFailed",
 		"type": "event"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "amount",
-				"type": "uint256"
-			},
-			{
-				"name": "hashedSecret",
-				"type": "bytes32"
-			}
-		],
-		"name": "allowWithdrawal",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "amount",
-				"type": "uint256"
-			},
-			{
-				"name": "wallet",
-				"type": "address"
-			}
-		],
-		"name": "remove",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "secret",
-				"type": "string"
-			}
-		],
-		"name": "withdraw",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"name": "newName",
-				"type": "string"
-			},
-			{
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "constructor"
 	}
 ]
