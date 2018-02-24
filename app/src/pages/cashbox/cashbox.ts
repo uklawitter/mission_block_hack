@@ -17,7 +17,7 @@ import {QRScanner, QRScannerStatus} from "@ionic-native/qr-scanner";
 })
 export class CashboxPage {
     public qrCodeData: string;
-    public amount: number = 40;
+    public amount: number = 500;
     public refund: number = 0;
 
     constructor(public navCtrl: NavController, public navParams: NavParams, private blockchainProvider: BlockchainProvider, private qrScanner: QRScanner, private loadingCtrl: LoadingController) {
