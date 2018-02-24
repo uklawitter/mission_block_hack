@@ -37,9 +37,16 @@ export class CashboxPage {
                         });
                         loader.present();
                         const tx = await this.blockchainProvider.remove(45, text);
-                        console.log("tx", tx);
-                        this.refund = 45;
-                        loader.dismiss();
+                        console.log(tx);
+                        if( tx.events.TransactionFailed) {
+                            console.error('🚨 not enough coins')
+                            // TODO: Fehlermeldung
+                        }else {
+                            console.log('👌🏼 bonus granted');
+                            this.refund = 45;
+                            loader.dismiss();
+                        }
+
                     });
 
                     this.qrScanner.show();
