@@ -14,7 +14,6 @@ const PRIVATE_KEY_COMPANY = "0x991f43aed4b487c5a0d1fb0fe575b0e55759b63cdd6841b18
 const KOVAN_TEST_NET = "ws://141.52.39.150:8546";
 
 
-
 /*
   Generated class for the BlockchainProvider provider.
 
@@ -261,14 +260,14 @@ export class BlockchainProvider {
     async initAsync() {
         const contr: any = this.baseBonusCoinContract.clone();
         contr.options.address = this.CONTR;
-        const map = this.bons.getValue().set(this.CONTR, {
-            addr: this.CONTR,
-            logo: "assets/imgs/kl_logo.png",
-            value: await contr.methods.getBalance().call({from: this.account.address}),
-            name: "Koin",
-            contract: null
-        });
-        this.bons.next(map.set("dummyaddr2", {
+        // const map = this.bons.getValue().set(this.CONTR, {
+        //     addr: this.CONTR,
+        //     logo: "assets/imgs/kl_logo.png",
+        //     value: await contr.methods.getBalance().call({from: this.account.address}),
+        //     name: "Koin",
+        //     contract: null
+        // });
+        this.bons.next(this.bons.getValue().set("dummyaddr2", {
             addr: "0x004fb0844f5dcE356E9D8Ffa3172052b28F91141",
             logo: "assets/imgs/logo_2.jpeg",
             value: 15,
@@ -292,37 +291,54 @@ export class BlockchainProvider {
                 addr: this.account.address
             }), this.account.privateKey) as { message: string });
 
-
+        console.log(await contr.methods.getBalance().call({from: this.account.address}));
         contr.events.BalanceChanged({filter: {wallet: this.account.address}}, (error, event) => {
             if (error) {
                 console.error(error);
                 return;
             }
             console.log(event);
-            this.balanceChangedEvent.emit("Action! : " + (event.returnValues.newBalance - event.returnValues.oldBalance)
-                .toFixed(2));
+            const val = event.returnValues.newBalance - event.returnValues.oldBalance;
+            this.balanceChangedEvent.emit(val.toFixed(2));
             const company = this.bons.getValue().get(event.address);
-            company.value = event.returnValues.newBalance;
-            this.bons.next(this.bons.getValue().set(event.address, company));
-
+            if (company) {
+                company.value = event.returnValues.newBalance;
+                this.bons.next(this.bons.getValue().set(event.address, company));
+            }
         });
-
-        console.log(await contr.methods.getBalance().call({from: this.account.address}));
 
     }
 
     async withDraw(scanInput: ScanInput): Promise<void> {
         console.log(scanInput);
         const company = this.bons.getValue().get(scanInput.addr);
+        const contr: any = this.baseBonusCoinContract.clone();
+        contr.options.address = scanInput.addr;
         if (!company) {
             if (!scanInput.addr) {
                 return;
+            } else if (scanInput.addr === this.CONTR) {
+                const map = this.bons.getValue().set(scanInput.addr, {
+                    addr: scanInput.addr,
+                    logo: "assets/imgs/kl_logo.png",
+                    // value: await contr.methods.getBalance().call({from: this.account.address}),
+                    value: 0,
+                    name: "Koin",
+                    contract: null
+                });
+                this.bons.next(map);
             } else {
-                // TODO add company
+                const map = this.bons.getValue().set(scanInput.addr, {
+                    addr: scanInput.addr,
+                    logo: "",
+                    // value: await contr.methods.getBalance().call({from: this.account.address}),
+                    value: 0,
+                    name: scanInput.addr,
+                    contract: null
+                });
+                this.bons.next(map);
             }
         }
-        const contr: any = this.baseBonusCoinContract.clone();
-        contr.options.address = scanInput.addr;
         await contr.methods.withdraw(scanInput.secret).send({from: this.account.address});
     }
 
@@ -338,7 +354,7 @@ export class BlockchainProvider {
             }), this.account.privateKey) as { message: string };
     }
 
-    async allowWithdrawal( value: number, secret: string) {
+    async allowWithdrawal(value: number, secret: string) {
         const contr = this.baseBonusCoinContract.clone();
         contr.options.address = this.CONTR;
         return contr.methods.allowWithdrawal(value, this.web3.utils.keccak256(secret)).send({from: this.companyAccount.address});
