@@ -10,17 +10,60 @@
     </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-    <ion-list no-lines>
-        <ion-item>
-            <ion-label floating>Betrag</ion-label>
-            <ion-input type="text" [(ngModel)]="amount"></ion-input>
-        </ion-item>
-        <ion-item>
-            <button ion-button block large color="secondary" (click)="generateQrCode()">Code generieren</button>
-        </ion-item>
-        <ion-item *ngIf="qrCodeData" text-center>
-            <qr-code [value]="qrCodeData" [size]="200"></qr-code>
-        </ion-item>
-    </ion-list>
+<ion-content>
+    <ion-card>
+        <ion-list>
+            <button ion-item (click)="useCoupon()">
+                Coupon von Kunde einlösen
+            </button>
+            <button ion-item (click)="removeCoupon()">
+                Coupon löschen
+            </button>
+        </ion-list>
+    </ion-card>
+
+    <ion-card>
+        <ion-list>
+            <ion-item>
+                <ion-label stacked>Betrag</ion-label>
+                <ion-input type="text" [(ngModel)]="amount"></ion-input>
+            </ion-item>
+            <button ion-item (click)="generateQrCode()">Kassenzettel erstellen</button>
+        </ion-list>
+    </ion-card>
+    <ion-card *ngIf="qrCodeData" text-center>
+        <ion-grid class="bill">
+            <ion-row>
+                <ion-col col-12><h1>KAUFLAND</h1></ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-12 text-left class="category">Schreibwaren</ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-8 text-left>Tragetasche</ion-col>
+                <ion-col col-4 text-right>{{ 2 | currency:'EUR'}}</ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-12 text-left class="category">Wein / Sekt / Spirituosen</ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-8 text-left>{{ amount - 2 }} x Superduper Wein</ion-col>
+                <ion-col col-4 text-right>{{ amount - 2 | currency:'EUR'}}</ion-col>
+            </ion-row>
+            <ion-row *ngIf="refund">
+                <ion-col col-8 text-left>Erstattung</ion-col>
+                <ion-col col-4 text-right>{{ refund | currency:'EUR' }}</ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-12>
+                    <hr/>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col col-8 text-left><h2>Summe</h2></ion-col>
+                <ion-col col-4 text-right><h2>{{ amount - refund | currency:'EUR' }}</h2></ion-col>
+            </ion-row>
+            <qr-code [value]="qrCodeData" [size]="200" [backgroundAlpha]="0"></qr-code>
+        </ion-grid>
+    </ion-card>
 </ion-content>
