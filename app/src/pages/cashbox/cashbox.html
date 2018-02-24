@@ -13,24 +13,20 @@
 <ion-content>
     <ion-card>
         <ion-list>
-            <button ion-item (click)="useCoupon()">
-                Coupon von Kunde einlösen
-            </button>
-            <button ion-item (click)="removeCoupon()">
-                Coupon löschen
-            </button>
-        </ion-list>
-    </ion-card>
-
-    <ion-card>
-        <ion-list>
             <ion-item>
                 <ion-label stacked>Betrag</ion-label>
                 <ion-input type="text" [(ngModel)]="amount"></ion-input>
             </ion-item>
-            <button ion-item (click)="generateQrCode()">Kassenzettel erstellen</button>
+            <button ion-item (click)="useCoupon()">
+                Coupon von Kunde einlösen
+            </button>
+            <button ion-item (click)="removeCoupon()" *ngIf="refund">
+                Coupon löschen
+            </button>
+            <button ion-item (click)="generateQrCode()" *ngIf="amount">Kassenzettel erstellen</button>
         </ion-list>
     </ion-card>
+
     <ion-card *ngIf="qrCodeData" text-center>
         <ion-grid class="bill">
             <ion-row>
@@ -51,8 +47,12 @@
                 <ion-col col-4 text-right>{{ amount - 2 | currency:'EUR'}}</ion-col>
             </ion-row>
             <ion-row *ngIf="refund">
-                <ion-col col-8 text-left>Erstattung</ion-col>
-                <ion-col col-4 text-right>{{ refund | currency:'EUR' }}</ion-col>
+                <ion-col col-8 text-left>Pfanne</ion-col>
+                <ion-col col-4 text-right>{{ 60 | currency:"EUR" }}</ion-col>
+            </ion-row>
+            <ion-row *ngIf="refund">
+                <ion-col col-8 text-left>Treuebonus</ion-col>
+                <ion-col col-4 text-right>{{ -refund | currency:'EUR' }}</ion-col>
             </ion-row>
             <ion-row>
                 <ion-col col-12>
@@ -61,7 +61,8 @@
             </ion-row>
             <ion-row>
                 <ion-col col-8 text-left><h2>Summe</h2></ion-col>
-                <ion-col col-4 text-right><h2>{{ amount - refund | currency:'EUR' }}</h2></ion-col>
+                <ion-col col-4 text-right *ngIf="!refund"><h2>{{ amount | currency:'EUR' }}</h2></ion-col>
+                <ion-col col-4 text-right *ngIf="refund"><h2>{{ amount - refund + 60 | currency:'EUR' }}</h2></ion-col>
             </ion-row>
             <qr-code [value]="qrCodeData" [size]="200" [backgroundAlpha]="0"></qr-code>
         </ion-grid>

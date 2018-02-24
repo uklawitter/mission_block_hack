@@ -6,7 +6,8 @@ contract BonusCoinContract {
 
     string public coinName;
 
-    uint256 private currentTotal;
+    uint256 private totalAllowed;
+    uint256 private totalCirculating;
 
     mapping(address => uint256) balance;
     mapping(bytes32 => uint256) allowance;
@@ -19,7 +20,8 @@ contract BonusCoinContract {
     function BonusCoinContract(string newName, address newOwner) public {
         owner = newOwner;
         coinName = newName;
-        currentTotal = 0;
+        totalCirculating = 0;
+        totalAllowed = 0;
     }
 
     function getBalance() public view
@@ -28,22 +30,41 @@ contract BonusCoinContract {
         return balance[msg.sender];
     }
 
+    function isBalanceSufficient(uint256 requestedAmount, address wallet) public view onlyOwner(msg.sender)
+        returns(bool) {
+
+        return (balance[wallet] > requestedAmount);
+    }
+
+    function getTotalAllowed() public view onlyOwner(msg.sender)
+        returns(uint256){
+
+        return totalAllowed;
+    }
+
+    function getTotalCirculating() public view onlyOwner(msg.sender)
+        returns(uint256){
+
+        return totalCirculating;
+    }
+
     function allowWithdrawal(uint256 amount, bytes32 hashedSecret) public onlyOwner(msg.sender) {
         allowance[hashedSecret] += amount;
+        totalAllowed += amount;
     }
 
     function withdraw(string secret) public {
         bytes32 hash = keccak256(secret);
         uint256 additionalBalance = allowance[hash];
         if (additionalBalance == 0) {
-	  WithdrawalFailed(msg.sender, coinName, secret);
-	  return;
-	}
-	
+            WithdrawalFailed(msg.sender, coinName, secret);
+            return;
+	    }
+
         allowance[hash] = 0;
         uint256 senderOldBalance = balance[msg.sender];
         uint256 newBalance = balance[msg.sender] += additionalBalance;
-        currentTotal += additionalBalance;
+        totalCirculating += additionalBalance;
         BalanceChanged(msg.sender, coinName, senderOldBalance, newBalance);
     }
 
@@ -59,6 +80,7 @@ contract BonusCoinContract {
 
         uint256 newBalance = balance[wallet] -= amount;
         BalanceChanged(wallet, coinName, oldBalance, newBalance);
+        totalCirculating -= amount;
         return true;
     }
 
