@@ -47,11 +47,11 @@ export class HomePage {
         this.qrScanner.prepare()
             .then((status: QRScannerStatus) => {
                 if (status.authorized) {
-                    let scanSub = this.qrScanner.scan().subscribe((text: string) => {
+                    let scanSub = this.qrScanner.scan().subscribe(async (text: string) => {
                         console.log("MARKER: text", text);
                         this.qrScanner.hide();
+                        await this.blockchainProvider.withDraw(JSON.parse(text));
                         scanSub.unsubscribe();
-
                         window.document.querySelector('ion-app').classList.remove('transparent-body')
                     });
 
