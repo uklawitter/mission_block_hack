@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {IonicPage, LoadingController, NavController, NavParams} from 'ionic-angular';
 import {BlockchainProvider} from "../../providers/blockchain/blockchain";
 import {QRScanner, QRScannerStatus} from "@ionic-native/qr-scanner";
 
@@ -20,7 +20,7 @@ export class CashboxPage {
     public amount: number = 40;
     public refund: number = 0;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, private blockchainProvider: BlockchainProvider, private qrScanner: QRScanner) {
+    constructor(public navCtrl: NavController, public navParams: NavParams, private blockchainProvider: BlockchainProvider, private qrScanner: QRScanner, private loadingCtrl: LoadingController) {
     }
 
     useCoupon() {
@@ -51,8 +51,13 @@ export class CashboxPage {
     }
 
     async generateQrCode() {
+        let loader = this.loadingCtrl.create({
+            content: "Kassenzettel wird gedruckt...",
+        });
+        loader.present();
         const secret = new Date().toDateString();
         await this.blockchainProvider.allowWithdrawal(+this.amount, secret);
         this.qrCodeData = JSON.stringify({ secret : secret, addr: "0x02Bf9b7d3dD7a008CA608102a01c877E1509883F"});
+        loader.dismiss();
     }
 }

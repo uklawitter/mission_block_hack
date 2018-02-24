@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, ToastController} from 'ionic-angular';
+import {LoadingController, NavController, ToastController} from 'ionic-angular';
 import {BlockchainProvider, CompanyEntry} from '../../providers/blockchain/blockchain';
 import {QRScanner, QRScannerStatus} from "@ionic-native/qr-scanner";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
@@ -14,7 +14,7 @@ export class HomePage {
     public bons$: BehaviorSubject<Map<string, CompanyEntry>>;
     public testInput: string;
 
-    constructor(private navCtrl: NavController, private qrScanner: QRScanner, private blockchainProvider: BlockchainProvider, public toastCtrl: ToastController) {
+    constructor(private navCtrl: NavController, private qrScanner: QRScanner, private blockchainProvider: BlockchainProvider, private toastCtrl: ToastController, public loadingCtrl: LoadingController) {
         this.addr$ = this.blockchainProvider.addr;
         this.bons$ = this.blockchainProvider.bons;
 
@@ -48,9 +48,13 @@ export class HomePage {
             .then((status: QRScannerStatus) => {
                 if (status.authorized) {
                     let scanSub = this.qrScanner.scan().subscribe(async (text: string) => {
-                        console.log("MARKER: text", text);
                         this.qrScanner.hide();
+                        let loader = this.loadingCtrl.create({
+                            content: "Guthaben wird gutgeschrieben...",
+                        });
+                        loader.present();
                         await this.blockchainProvider.withDraw(JSON.parse(text));
+                        loader.dismiss();
                         scanSub.unsubscribe();
                         window.document.querySelector('ion-app').classList.remove('transparent-body')
                     });
