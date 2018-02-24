@@ -47,7 +47,7 @@ export class CashboxPage {
     }
 
     removeCoupon() {
-        this.refund = 0;
+        this.refund = 15;
     }
 
     async generateQrCode() {
