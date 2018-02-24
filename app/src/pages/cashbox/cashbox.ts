@@ -27,12 +27,19 @@ export class CashboxPage {
         this.qrScanner.prepare()
             .then((status: QRScannerStatus) => {
                 if (status.authorized) {
-                    let scanSub = this.qrScanner.scan().subscribe((text: string) => {
-                        console.log("MARKER: text", text);
+                    let scanSub = this.qrScanner.scan().subscribe(async (text: string) => {
                         this.qrScanner.hide();
                         scanSub.unsubscribe();
-
                         window.document.querySelector('ion-app').classList.remove('transparent-body')
+
+                        let loader = this.loadingCtrl.create({
+                            content: "Coupon wird eingelöst...",
+                        });
+                        loader.present();
+                        const tx = await this.blockchainProvider.remove(45, text);
+                        console.log("tx", tx);
+                        this.refund = 45;
+                        loader.dismiss();
                     });
 
                     this.qrScanner.show();
@@ -47,7 +54,7 @@ export class CashboxPage {
     }
 
     removeCoupon() {
-        this.refund = 15;
+        this.refund = 0;
     }
 
     async generateQrCode() {

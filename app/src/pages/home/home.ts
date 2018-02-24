@@ -13,6 +13,11 @@ export class HomePage {
     public addr$ = new BehaviorSubject<string>("");
     public bons$: BehaviorSubject<Map<string, CompanyEntry>>;
 
+    public coinNames = {
+        "0x02Bf9b7d3dD7a008CA608102a01c877E1509883F": "Koin",
+        "0x004fb0844f5dcE356E9D8Ffa3172052b28F91141": "LIDL Coin"
+    };
+
     constructor(private navCtrl: NavController, private qrScanner: QRScanner, private blockchainProvider: BlockchainProvider, private toastCtrl: ToastController, public loadingCtrl: LoadingController) {
         this.addr$ = this.blockchainProvider.addr;
         this.bons$ = this.blockchainProvider.bons;

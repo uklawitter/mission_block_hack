@@ -46,6 +46,9 @@
                 <ion-col col-8 text-left>{{ amount - 2 }} x Superduper Wein</ion-col>
                 <ion-col col-4 text-right>{{ amount - 2 | currency:'EUR'}}</ion-col>
             </ion-row>
+            <ion-row>
+                <ion-col col-12 text-left class="category">Treueprogramm</ion-col>
+            </ion-row>
             <ion-row *ngIf="refund">
                 <ion-col col-8 text-left>Pfanne</ion-col>
                 <ion-col col-4 text-right>{{ 60 | currency:"EUR" }}</ion-col>
